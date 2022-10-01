@@ -1,5 +1,12 @@
 <script setup>
 import quizList from './../quizList'
+
+const router = useRouter()
+
+function startQuiz() {
+    router.push('/quiz/1')
+}
+
 </script>
 
 <template>
@@ -8,10 +15,23 @@ import quizList from './../quizList'
             <div class="col-md-6" v-for="(quiz, index) in quizList" :key="index">
                 <div class="card">
                     <div class="card-body">
-                        <p>Quiz {{ quiz.id }}</p>
-                        <p>Topic: {{ quiz.title }}</p>
-                        <p>Questions: {{ quiz.questions.length }}</p>
-                        <NuxtLink class="btn btn-primary w-100" to="/quiz/1">Start Quiz</NuxtLink>
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>Quiz</th>
+                                <th>Topic</th>
+                                <th>Questions</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Quiz {{ quiz.id }}</td>
+                                    <td>{{ quiz.title }}</td>
+                                    <td>{{ quiz.questions.length }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="text" class="form-control mb-3" v-model="quiz.username"
+                            placeholder="enter your name to continue">
+                        <button :disabled="!quiz.username.length" @click="startQuiz()" class="btn btn-primary w-100" to="">Start Quiz</button>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
-export default [
+const quizess = reactive([
     {
         id: 1,
         title: 'About bangladesh',
+        username: '',
         questions: [
             {
                 id: 1,
@@ -71,4 +72,6 @@ export default [
             },
         ]
     }
-]
+])
+
+export default quizess

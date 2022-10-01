@@ -1,8 +1,12 @@
 <script setup>
 import quizList from './../../quizList'
+
+const router = useRouter()
+
 const quiz = ref(quizList[0])
 
 onBeforeMount(() => {
+    quiz.username = ''
     quiz.value.questions = quiz.value.questions.map(question => {
         question.choosen_ans = []
         return question
@@ -18,6 +22,8 @@ const isLastQuestion = computed(() => activeQuestionNo.value == quiz.value.quest
 function nextQuestion() {
     if (quiz.value.questions.length > activeQuestionNo.value) {
         activeQuestionIndex.value += 1
+    } else {
+        router.push('/result')
     }
 }
 
@@ -26,20 +32,25 @@ function jumpQuestion(index) {
 }
 
 function toggleChoosenAns(opt) {
-    if (activeQuestion.value.choosen_ans.includes(opt)) {
-        activeQuestion.value.choosen_ans = activeQuestion.value.choosen_ans.filter(item => item != opt)
-    } else {
-        activeQuestion.value.choosen_ans.push(opt)
-    }
+    activeQuestion.value.choosen_ans = [opt]
+    // if (activeQuestion.value.choosen_ans.includes(opt)) {
+    //     activeQuestion.value.choosen_ans = activeQuestion.value.choosen_ans.filter(item => item != opt)
+    // } else {
+    //     activeQuestion.value.choosen_ans.push(opt)
+    // }
+    nextQuestion()
 }
+
 
 
 </script>
 
 <template>
     <section>
+        <h3 class="text-center">Hello, {{ quiz.username }}</h3>
+        <hr>
         <p class="text-center fw-bold">Topic: {{ quiz.title }}</p>
-        <div class="d-flex m-3 gap-1">
+        <div class="d-flex m-3 gap-1 justify-content-center">
             <span @click="jumpQuestion(index)" class="border p-2 px-3 qsn-no"
                 :class="{ 'border-0 fw-bold' : index == activeQuestionIndex,'bg-warning': item.choosen_ans.length}"
                 v-for="(item, index) in quiz.questions">{{
@@ -58,8 +69,8 @@ function toggleChoosenAns(opt) {
                 </div>
             </div>
         </div>
-        <button v-if="!isLastQuestion" class="btn btn-success w-100 mt-3" @click="nextQuestion()">Continue</button>
-        <NuxtLink v-else to="/result" class="btn btn-primary w-100">Finish</NuxtLink>
+        <button v-if="!isLastQuestion" class="btn btn-danger w-100 mt-3" @click="nextQuestion()">Pass</button>
+        <NuxtLink v-if="isLastQuestion" to="/result" class="btn btn-primary w-100">Finish</NuxtLink>
     </section>
 </template>
 
